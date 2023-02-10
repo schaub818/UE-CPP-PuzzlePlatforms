@@ -20,7 +20,8 @@ void AMovingPlatform::BeginPlay()
 		SetReplicates(true);
 		SetReplicateMovement(true);
 
-		TargetLocation += GetActorLocation();
+		globalStartLocation = GetActorLocation();
+		globalTargetLocation = TargetLocation + globalStartLocation;
 	}
 }
 
@@ -30,8 +31,29 @@ void AMovingPlatform::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
-		FVector location = GetActorLocation();
+		FVector currentLocation = GetActorLocation();
+		FVector target;
+		FVector newLocation;
 
-		SetActorLocation(FMath::VInterpConstantTo(location, TargetLocation, DeltaTime, MoveSpeed));
+		if (movingForward)
+		{
+			target = globalTargetLocation;
+		}
+		else
+		{
+			target = globalStartLocation;
+		}
+
+		if ((currentLocation - target).Size() < MoveSpeed * DeltaTime)
+		{
+			newLocation = target;
+			movingForward = !movingForward;
+		}
+		else
+		{
+			newLocation = FMath::VInterpConstantTo(currentLocation, target, DeltaTime, MoveSpeed);
+		}
+
+		SetActorLocation(newLocation);
 	}
 }

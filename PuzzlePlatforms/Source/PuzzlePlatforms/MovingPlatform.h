@@ -26,4 +26,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	FVector globalTargetLocation;
+	FVector globalStartLocation;
+
+	bool movingForward = true;
 };
