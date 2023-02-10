@@ -2,6 +2,7 @@
 
 
 #include "MovingPlatform.h"
+#include "Math/UnrealMathUtility.h"
 
 AMovingPlatform::AMovingPlatform()
 {
@@ -18,6 +19,8 @@ void AMovingPlatform::BeginPlay()
 	{
 		SetReplicates(true);
 		SetReplicateMovement(true);
+
+		TargetLocation += GetActorLocation();
 	}
 }
 
@@ -28,8 +31,7 @@ void AMovingPlatform::Tick(float DeltaTime)
 	if (HasAuthority())
 	{
 		FVector location = GetActorLocation();
-		location += FVector(MoveSpeed * DeltaTime, 0, 0);
 
-		SetActorLocation(location);
+		SetActorLocation(FMath::VInterpConstantTo(location, TargetLocation, DeltaTime, MoveSpeed));
 	}
 }
