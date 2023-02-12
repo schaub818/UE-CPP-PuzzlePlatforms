@@ -74,6 +74,5 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # Third-person example content
-Content/__External**/*
 Content/Characters/*
 Content/LevelPrototyping/*
