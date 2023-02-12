@@ -25,6 +25,13 @@ void APlatformTrigger::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (!ensure(triggerVolume != nullptr))
+	{
+		return;
+	}
+
+	triggerVolume->OnComponentBeginOverlap.AddDynamic(this, &APlatformTrigger::OnBeginOverlap);
+	triggerVolume->OnComponentEndOverlap.AddDynamic(this, &APlatformTrigger::OnEndOverlap);
 }
 
 // Called every frame
@@ -34,3 +41,12 @@ void APlatformTrigger::Tick(float DeltaTime)
 
 }
 
+void APlatformTrigger::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Activated: %s, %s"), *OtherActor->GetFName().ToString(), *OtherComp->GetFName().ToString());
+}
+
+void APlatformTrigger::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Deactivated: %s, %s"), *OtherActor->GetFName().ToString(), *OtherComp->GetFName().ToString());
+}
