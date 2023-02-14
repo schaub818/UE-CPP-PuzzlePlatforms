@@ -16,6 +16,15 @@ void UPuzzlePlatformsGameInstance::Init()
 void UPuzzlePlatformsGameInstance::Host()
 {
 	GEngine->AddOnScreenDebugMessage(0, 2.0f, FColor::Cyan, FString::Printf(TEXT("Hosting")));
+
+	UWorld* world = GetWorld();
+
+	if (!ensure(world != nullptr))
+	{
+		return;
+	}
+
+	world->ServerTravel("/Game/PuzzlePlatforms/Maps/Testing?listen");
 }
 
 void UPuzzlePlatformsGameInstance::Join(const FString& address)
