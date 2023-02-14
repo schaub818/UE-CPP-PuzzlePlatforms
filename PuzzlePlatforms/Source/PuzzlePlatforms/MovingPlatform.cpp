@@ -25,11 +25,25 @@ void AMovingPlatform::BeginPlay()
 	}
 }
 
+void AMovingPlatform::AddActiveTrigger()
+{
+	activeTriggers++;
+
+	GEngine->AddOnScreenDebugMessage(-1, 0.35f, FColor::Cyan, FString::Printf(TEXT("Triggers: %i"), activeTriggers));
+}
+
+void AMovingPlatform::RemoveActiveTrigger()
+{
+	activeTriggers = FMath::Clamp(--activeTriggers, 0, 1000);
+
+	GEngine->AddOnScreenDebugMessage(-1, 0.35f, FColor::Cyan, FString::Printf(TEXT("Triggers: %i"), activeTriggers));
+}
+
 void AMovingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (HasAuthority())
+	if (HasAuthority() && activeTriggers > 0)
 	{
 		FVector currentLocation = GetActorLocation();
 		FVector target;
